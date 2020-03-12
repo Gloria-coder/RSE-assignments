@@ -1,0 +1,23 @@
+#!/usr/bin/env python 
+# -*- coding: utf-8 -*-
+
+#Every Python ROS Node will have this declaration at the top. The first line makes sure your script is executed as a Python script.
+import rospy   #导入rospy包
+from std_msgs.msg import String   #需要从std_msgs包导入一个String类型
+def talker():
+    pub = rospy.Publisher('hello_pub',String,queue_size=10)   #创建一个对象发布到主题hello_pub上去
+    rospy.init_node('hello_world_publisher',anonymous=True)   
+#init_node(NAME, ...), is very important as it tells rospy the name of your node -- until rospy #has this information, it cannot start communicating with the ROS Master. In this case, your #node will take on the name talker. NOTE: the name must be a base name, i.e. it cannot contain #any slashes "/".
+#anonymous = True ensures that your node has a unique name by adding random numbers to the end #of NAME. Refer to Initialization and Shutdown - Initializing your ROS Node in the rospy #documentation for more information about node initialization options.
+    r = rospy.Rate(1)    #设定速率为10
+    begin=1
+    while not rospy.is_shutdown():      #在Ctrl+C时，退出循环
+        str = "1811617 %s" % begin  
+        rospy.loginfo(str)
+        pub.publish(str)
+        begin=begin+1
+        r.sleep()
+if __name__ == '__main__':
+    try:
+        talker()
+    except rospy.ROSInterruptException:pass
